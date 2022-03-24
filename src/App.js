@@ -23,10 +23,10 @@ function App() {
     e.preventDefault();
     const emailsRef = collection(db, "participants")
     const emailQuery = query(emailsRef, where("email", "==", emailRef.current.value));
-    if(emailQuery){return toast.error("Email address already registered")}
     if(firstNameRef.current.value === ""){return toast.error("Please enter first name")}
     if(lastNameRef.current.value === ""){return toast.error("Please enter last name")}
     if(emailRef.current.value === ""){return toast.error("Please enter email")}
+    if(emailQuery){return toast.error("Email address already registered")}
     if(addressRef.current.value === ""){return toast.error("Please enter address")}
     if(cityRef.current.value === ""){return toast.error("Please enter city")}
     if(stateRef.current.value === ""){return toast.error("Please enter state")}
