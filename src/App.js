@@ -22,7 +22,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const emailsRef = collection(db, "participants")
-    const emailQuery = query(emailsRef, where("email", "==", emailRef.current.value));
+    const emailQuery = query(emailRef, where("email", "==", emailRef.current.value));
     if(firstNameRef.current.value === ""){return toast.error("Please enter first name")}
     if(lastNameRef.current.value === ""){return toast.error("Please enter last name")}
     if(emailRef.current.value === ""){return toast.error("Please enter email")}
