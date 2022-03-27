@@ -3,9 +3,8 @@ import { useRef } from 'react';
 import { Button, Card, Form, Row, Col, FormGroup } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { db } from './firebase';
-import { collection, addDoc, query, where } from "firebase/firestore";
+import { collection, addDoc, query, where, doc, getDoc, setDoc } from "firebase/firestore";
 import toast, { Toaster } from 'react-hot-toast';
-import bgImg  from "./pexels-zaksheuskaya-1568607 (1).jpg"
 
 
 function App() {
@@ -19,26 +18,27 @@ function App() {
   const stateRef = useRef();
   const numberRef = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const emailsRef = collection(db, "participants")
-    const emailQuery = query(emailsRef, where("email", "==", emailRef.current.value));
     if(firstNameRef.current.value === ""){return toast.error("Please enter first name")}
     if(lastNameRef.current.value === ""){return toast.error("Please enter last name")}
     if(emailRef.current.value === ""){return toast.error("Please enter email")}
-    if(emailQuery){return toast.error("Email address already registered")}
+    const docRef = doc(db, "participants", emailRef.current.value);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {return toast.error("Email already registered!");}
+    if(numberRef.current.value === ""){return toast.error("Please enter number")}
     if(addressRef.current.value === ""){return toast.error("Please enter address")}
     if(cityRef.current.value === ""){return toast.error("Please enter city")}
     if(stateRef.current.value === ""){return toast.error("Please enter state")}
     if(zipRef.current.value === ""){return toast.error("Please enter zip")}
-    if(numberRef.current.value === ""){return toast.error("Please enter number")}
     if(document.getElementById("checkRef").checked === false){return toast.error("Please accept terms and conditions")}
     storeToDatabase();
   }
+  
 
   async function storeToDatabase() {
     try{
-      const docRef = await addDoc(collection(db, "participants"), {
+      const docRef = await setDoc(doc(db, "participants", emailRef.current.value), {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         email: emailRef.current.value,
@@ -49,7 +49,7 @@ function App() {
         number: numberRef.current.value
       });
       // console.log("Document written with ID", docRef.id);
-      // toast.success("Registered successfully")
+      toast.success(`Registered successfully`);
     }catch(err){
       console.log("Error adding document ", err);
     }
@@ -85,7 +85,7 @@ function App() {
 
         <FormGroup className='mt-3' >
           <Form.Label>Mobile number</Form.Label>
-          <Form.Control ref={numberRef} type="email" placeholder='9876543210' />
+          <Form.Control ref={numberRef} type="number" placeholder='9876543210' />
         </FormGroup>
 
         <FormGroup className='mt-3' >
