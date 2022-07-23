@@ -3,9 +3,10 @@ import { useRef } from 'react';
 import { Button, Card, Form, Row, Col, FormGroup } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { db } from './firebase';
-import { collection, addDoc, query, where, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import toast, { Toaster } from 'react-hot-toast';
-
+import  bgImg  from './Pattern.svg'
+ 
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
 
   async function storeToDatabase() {
     try{
-      const docRef = await setDoc(doc(db, "participants", emailRef.current.value), {
+        await setDoc(doc(db, "participants", emailRef.current.value), {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         email: emailRef.current.value,
@@ -58,7 +59,8 @@ function App() {
 
   return (
     <div className="App font-nunito">
-      <img className='h-100 w-100 z-in' src="https://source.unsplash.com/1440x935/?Splash" alt="" />
+      {/* <img className='h-100 w-100 z-in' src="https://source.unsplash.com/1440x935/?Splash" alt="" /> */}
+      <img className='bgimg z-in' src={ bgImg } alt="" />
       <Toaster position = "top-center" />
       <Card className='card' >
         <Card.Title className='text-center mb-5 mt-2' as="h3">Registration form</Card.Title>
